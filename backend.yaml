@@ -30,11 +30,11 @@
   - name: cd /app    
     ansible.builtin.command: cd /app
 
-- name: unzip /tmp/backend.zip
-  ansible.builtin.unarchive:
-    src: https://expense-builds.s3.us-east-1.amazonaws.com/expense-backend-v2.zip
-    dest: /app/
-    remote_src: yes
+  - name: unzip /tmp/backend.zip
+    ansible.builtin.unarchive:
+      src: https://expense-builds.s3.us-east-1.amazonaws.com/expense-backend-v2.zip
+      dest: /app/
+      remote_src: yes
 
 
 
