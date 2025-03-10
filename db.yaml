@@ -29,5 +29,7 @@
       filter: version
     ignore_erros: yes
     register: my_db_connection
-    
-          
+
+  - name: print connection
+    ansible.builtin.debug:
+      msg: "{{my_db_connection}}"          
