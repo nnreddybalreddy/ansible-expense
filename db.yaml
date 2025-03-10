@@ -21,15 +21,13 @@
       state: started
       enabled: yes
 
-  - name: db setup or not
+  - name: db password set up or not
     community.mysql.mysql_info:
       login_user: "{{login_user}}"
       login_password: "{{login_password}}"
       login_host: "{{login_host}}"
       filter: version
-    ignore_erros: yes
-    register: my_db_connection
+    ignore_errors: yes
+    register: mysql_connection_output      
 
-  - name: print connection
-    ansible.builtin.debug:
-      msg: "{{my_db_connection}}"          
+        
