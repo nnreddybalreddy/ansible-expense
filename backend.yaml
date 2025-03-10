@@ -33,11 +33,10 @@
       dest: /app/
       remote_src: yes
 
-  - name: cd /app    
-    ansible.builtin.command: cd /app      
-
   - name: npm install
     ansible.builtin.command: npm install
+    args:
+      chdir: /app
 
           
 
