@@ -1,0 +1,33 @@
+- name: configure the db server
+  hosts: db
+  become: yes
+  vars:
+  - login_host: db.narendra.shop
+  - login_user: root
+  vars_prompt:
+  - name: login_password
+    prompt: "Enter password::"
+    private: false
+
+  tasks:
+  - name: install mysql server
+    ansible.builtin.dnf:
+      name: mysql-server
+      state: latest
+
+  - name: start service
+    ansible.builtin.service:
+      name: mysqld
+      state: started
+      enabled: yes
+
+  - name: db setup or not
+    community.mysql.mysql_info:
+      login_user: "{{login_user}}"
+      login_password: "{{login_password}}"
+      login_host: "{{login_host}}"
+      filter: version
+    ignore_erros: yes
+    register: my_db_connection
+    
+          
