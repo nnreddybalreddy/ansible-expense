@@ -38,8 +38,12 @@
     ignore_errors: yes
     register: mysql_connection_output   
 
-  - name: print mysql info
-    ansible.builtin.debug:
-      msg: "{{mysql_connection_output}}"       
+  # - name: print mysql info
+  #   ansible.builtin.debug:
+  #     msg: "{{mysql_connection_output}}"     
+
+  - name: setup root password
+    ansible.builtin.command: "mysql_secure_installation --set-root-pass {{ login_password }}"  
+    when: mysql_connection_output.failed is true
 
         
