@@ -1,6 +1,15 @@
 - name: configure backend
   hosts: backend
   become: yes
+  vars:
+  - login_user: root
+  - login_host: db.narendra.shop
+
+  vars_prompt:
+  - name: login_password
+    prompt: "ExpenseApp@1"
+    private: false
+
   tasks:
   - name: dnf module disable nodejs -y
     ansible.builtin.command: dnf module disable nodejs -y
@@ -48,13 +57,13 @@
 
   - name: import data into mysql
     community.mysql.mysql_db:
-      login_user: root
+      login_user: "{{login_user}}"
       login_password: "{{ login_password }}"
       login_host: "{{ login_host }}"
       target: /app/schema/backend.sql
       state: import
       name: all
-      
+
   - name: daemon-reload
     ansible.builtin.systemd_service:
       daemon_reload: true
