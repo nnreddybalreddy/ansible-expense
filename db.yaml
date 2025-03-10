@@ -21,6 +21,14 @@
       state: started
       enabled: yes
 
+  - name: install python mysql dependencies
+    ansible.builtin.pip:
+      name:
+      - PyMySQL
+      - cryptography
+      executable: pip3.9 # pip3.11 if python version is 3.11      
+      
+
   - name: db password set up or not
     community.mysql.mysql_info:
       login_user: "{{login_user}}"
@@ -28,6 +36,10 @@
       login_host: "{{login_host}}"
       filter: version
     ignore_errors: yes
-    register: mysql_connection_output      
+    register: mysql_connection_output   
+
+  - name: print mysql info
+    ansible.builtin.debug:
+      msg: "{{mysql_connection_output}}"       
 
         
