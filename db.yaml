@@ -1,49 +1,31 @@
-- name: configure the db server
+- name: configure DB server
   hosts: db
   become: yes
   vars:
-  - login_host: db.narendra.shop
-  - login_user: root
+    login_user: root
+    login_host: db.narendra.shop
   vars_prompt:
-  - name: login_password
-    prompt: "Enter password::"
-    private: false
-
+    name: login_password 
+    prompt: "Please enter password: ExpenseApp@1"
+    private: false  
   tasks:
-  - name: install mysql server
+  - name: dnf install mysql-server -y
     ansible.builtin.dnf:
       name: mysql-server
-      state: latest
+      state: latest 
 
-  - name: start service
+  - name: systemctl enable mysqld   
     ansible.builtin.service:
-      name: mysqld
-      state: started
-      enabled: yes
+      name: mysqld 
+      state: started 
+      enabled: yes 
 
-  - name: install python mysql dependencies
-    ansible.builtin.pip:
-      name:
-      - PyMySQL
-      - cryptography
-      executable: pip3.9 # pip3.11 if python version is 3.11      
-      
-
-  - name: db password set up or not
-    community.mysql.mysql_info:
+  - name: check password set or not
+    community.mysql.mysql_info:    
       login_user: "{{login_user}}"
       login_password: "{{login_password}}"
       login_host: "{{login_host}}"
       filter: version
     ignore_errors: yes
-    register: mysql_connection_output   
-
-  # - name: print mysql info
-  #   ansible.builtin.debug:
-  #     msg: "{{mysql_connection_output}}"     
-
-  - name: setup root password
-    ansible.builtin.command: "mysql_secure_installation --set-root-pass {{ login_password }}"  
-    when: mysql_connection_output.failed is true
-
+    register: mysql_connection_output      
         
