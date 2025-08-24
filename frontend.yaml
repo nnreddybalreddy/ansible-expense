@@ -7,14 +7,13 @@
       name: nginx
       state: latest
 
-  - name: start and enable nginx
+  - name: denable
     ansible.builtin.service:
       name: nginx
       state: started
-      enabled: yes
+      enabled: yes    
 
-
-  - name: delete default website
+  - name: rm -rf /usr/share/nginx/html/*
     ansible.builtin.file:
       path: /usr/share/nginx/html
       state: absent
@@ -22,25 +21,20 @@
   - name: Create a directory if it does not exist
     ansible.builtin.file:
       path: /usr/share/nginx/html
-      state: directory
+      state: directory     
 
-  - name: download and extract frontend code
+  - name: unzip
     ansible.builtin.unarchive:
       src: https://expense-builds.s3.us-east-1.amazonaws.com/expense-frontend-v2.zip
       dest: /usr/share/nginx/html
-      remote_src: yes 
+      remote_src: yes
 
-  - name: expense.conf
+  - name: /etc/nginx/default.d/expense.conf
     ansible.builtin.copy:
       src: expense.conf
-      dest: /etc/nginx/default.d/expense.conf 
+      dest: /etc/nginx/default.d/expense.conf
 
-  - name: restart nginx
+  - name: restart
     ansible.builtin.service:
       name: nginx
       state: restarted
-
-
-
-
-      
