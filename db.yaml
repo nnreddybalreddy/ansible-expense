@@ -13,7 +13,7 @@
     ansible.builtin.dnf:
       name: mysql-server
       state: latest 
-      
+
   - name: install python mysql dependencies
     ansible.builtin.pip:
       name:
@@ -35,4 +35,8 @@
       filter: version
     ignore_errors: yes
     register: mysql_connection_output      
+
+  - name: password set
+    ansible.builtin.command: "mysql_secure_installation --set-root-pass {{ login_password }}"
+    when: mysql_connection_output.failed is true
         
