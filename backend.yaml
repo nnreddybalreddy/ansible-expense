@@ -1,6 +1,13 @@
 - name: configure backend server 
   hosts: backend 
   become: yes 
+  vars:
+  - login_user: root
+  - login_host: db.narendra.shop
+  vars_prompt:
+  - name: login_password
+    prompt: "ExpenseApp@1"
+    private: false  
   tasks:
   - name: dnf module disable nodejs -y
     ansible.builtin.command: dnf module disable nodejs -y
