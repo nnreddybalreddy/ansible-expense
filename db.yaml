@@ -58,6 +58,14 @@
       state: started
       enabled: yes
 
+  - name: install python mysql depenencies
+    ansible.builtin.pip:
+      name:
+      - PyMySQL
+      - cryptography
+      executable: pip3.9
+ 
+
 
   - name: checking root password 
     community.mysql.mysql_info:
