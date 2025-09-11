@@ -1,3 +1,13 @@
+- name: configure DB server
+  hosts: db
+  become: yes
+  vars:
+    login_user: root
+    login_host: db.narendra.shop
+  vars_prompt:
+    name: login_password 
+    prompt: "Please enter password: ExpenseApp@1"
+    private: false  
   tasks:
   - name: dnf install mysql-server -y
     ansible.builtin.dnf:
