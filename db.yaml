@@ -1,78 +1,21 @@
-# - name: configure DB server
-#   hosts: db
-#   become: yes
-#   vars:
-#     login_user: root
-#     login_host: db.narendra.shop
-#   vars_prompt:
-#     name: login_password 
-#     prompt: "Please enter password: ExpenseApp@1"
-#     private: false  
-#   tasks:
-#   - name: dnf install mysql-server -y
-#     ansible.builtin.dnf:
-#       name: mysql-server
-#       state: latest 
-
-#   - name: install python mysql dependencies
-#     ansible.builtin.pip:
-#       name:
-#       - PyMySQL
-#       - cryptography
-#       executable: pip3.9 # pip3.11 if python version is 3.11        
-
-#   - name: systemctl enable mysqld   
-#     ansible.builtin.service:
-#       name: mysqld 
-#       state: started 
-#       enabled: yes 
-
-#   - name: check password set or not
-#     community.mysql.mysql_info:    
-#       login_user: "{{login_user}}"
-#       login_password: "{{login_password}}"
-#       login_host: "{{login_host}}"
-#       filter: version
-#     ignore_errors: yes
-#     register: mysql_connection_output      
-
-#   - name: password set
-#     ansible.builtin.command: "mysql_secure_installation --set-root-pass {{ login_password }}"
-#     when: mysql_connection_output.failed is true
-
-- name: configure DB server
-  hosts: db
-  become: yes
-  vars:
-    login_user: root
-    login_host: db.narendra.shop
-  vars_prompt:
-    name: login_password 
-    prompt: "Please enter password: ExpenseApp@1"
-    private: false      
   tasks:
-  - name: install mysql server
+  - name: dnf install mysql-server -y
     ansible.builtin.dnf:
       name: mysql-server
-      state: latest
+      state: latest 
 
-  - name: install python mysql depenencies
+  - name: install python mysql dependencies
     ansible.builtin.pip:
       name:
       - PyMySQL
       - cryptography
-      executable: pip3.9      
+      executable: pip3.9 # pip3.11 if python version is 3.11        
 
-
-  - name: start and enable
+  - name: systemctl enable mysqld   
     ansible.builtin.service:
-      name: mysqld
-      state: started
-      enabled: yes
-
-
- 
-
+      name: mysqld 
+      state: started 
+      enabled: yes 
 
   - name: check password set or not
     community.mysql.mysql_info:    
@@ -81,12 +24,8 @@
       login_host: "{{login_host}}"
       filter: version
     ignore_errors: yes
-    register: mysql_connection_output   
+    register: mysql_connection_output      
 
-
-  - name: print output
-    ansible.builtin.debug:
-      msg: "{{mysql_connection_output}}"
-
-
-        
+  - name: password set
+    ansible.builtin.command: "mysql_secure_installation --set-root-pass {{ login_password }}"
+    when: mysql_connection_output.failed is true
